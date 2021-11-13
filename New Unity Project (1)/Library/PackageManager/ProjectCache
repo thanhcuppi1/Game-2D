@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637722043701932153
-    m_Hash: 1302763368
+      ticks: 637724015867105038
+    m_Hash: 1096441731
   m_LockFileStatus:
     m_FilePath: C:/Users/Administrator/Desktop/Game-2D/New Unity Project (1)/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637722043702831660
-    m_Hash: 2780916596
+      ticks: 637724015867105038
+    m_Hash: 2009282155
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_PackageAssets:
@@ -113,6 +113,7 @@ m_PackageAssets:
         - 7.0.0-pre.3
         - 7.0.0
         - 7.0.1
+        - 7.0.2
         - 8.0.0-pre.3
         compatible:
         - 5.0.6
@@ -508,6 +509,7 @@ m_PackageAssets:
         - 7.0.0-pre.3
         - 7.0.0
         - 7.0.2
+        - 7.0.3
         - 8.0.0-pre.4
         compatible:
         - 5.1.4
