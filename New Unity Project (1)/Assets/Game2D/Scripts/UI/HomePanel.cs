@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-namespace Game2Ds
+namespace Game2D
 {
     public class HomePanel : MonoBehaviour
     {
