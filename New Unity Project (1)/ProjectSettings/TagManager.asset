@@ -16,8 +16,8 @@ TagManager:
   - 
   - Player
   - Enemy
-  - 
-  - 
+  - Ground
+  - Climbable
   - 
   - 
   - 
@@ -47,4 +47,7 @@ TagManager:
     locked: 0
   - name: Platform
     uniqueID: 1146194119
+    locked: 0
+  - name: Character
+    uniqueID: 643556043
     locked: 0
