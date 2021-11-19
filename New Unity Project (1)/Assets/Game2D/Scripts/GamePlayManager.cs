@@ -99,5 +99,4 @@ namespace Game2D
             //TODO: reload current scene
         }
     }
-    //load something
 }
