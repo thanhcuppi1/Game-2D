@@ -1,0 +1,20 @@
+[api-updater (non-obsolete-error-filter)] 19/11/2021 8:02:42 CH : Starting D:/Học Tập/Unity Version/2020.3.18f1/Editor/Data/Tools/ScriptUpdater/APIUpdater.NonObsoleteApiUpdaterDetector.exe
+[api-updater (non-obsolete-error-filter)] 
+----------------------------------
+jit/startup time      : 1339,8802ms
+moved types parse time: 383ms
+candidates parse time : 82ms
+C# parse time         : 4545ms
+candidates check time : 353ms
+console write time    : 1ms
+
+[api-updater (non-obsolete-error-filter)] 19/11/2021 8:20:34 CH : Starting D:/Học Tập/Unity Version/2020.3.18f1/Editor/Data/Tools/ScriptUpdater/APIUpdater.NonObsoleteApiUpdaterDetector.exe
+[api-updater (non-obsolete-error-filter)] 
+----------------------------------
+jit/startup time      : 1518,9009ms
+moved types parse time: 199ms
+candidates parse time : 4ms
+C# parse time         : 560ms
+candidates check time : 212ms
+console write time    : 19ms
+
