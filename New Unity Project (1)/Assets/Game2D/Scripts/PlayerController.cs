@@ -153,6 +153,11 @@ namespace Game2D
                 m_AttackInput = false;
         }
 
+        private void PlayAttackSFX()
+        {
+            AudioManager.Instance.PlaySFX_MeleeSplash();
+        }
+
         [ContextMenu("PlayAttackAnim")]
         private void PlayAttackAnim()
         {
