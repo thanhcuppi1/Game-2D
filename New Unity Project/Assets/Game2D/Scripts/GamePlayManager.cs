@@ -96,7 +96,7 @@ namespace Game2D
 
         public void Restart()
         {
-            //TODO: reload current scene
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }

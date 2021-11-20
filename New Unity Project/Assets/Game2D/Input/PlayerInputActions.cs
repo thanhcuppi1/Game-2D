@@ -115,7 +115,7 @@ namespace Game2D
                 {
                     ""name"": """",
                     ""id"": ""540d460d-7cb9-4510-b2e7-0aceee7194fa"",
-                    ""path"": ""<Keyboard>/ctrl"",
+                    ""path"": ""<Keyboard>/#(e)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

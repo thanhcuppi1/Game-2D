@@ -8,8 +8,11 @@ namespace Game2D
 {
     public class PlayerController : MonoBehaviour
     {
+        public Action<int, int> onCurHPChanged;
+
         [SerializeField] private Rigidbody2D m_Rigidbody;
         [SerializeField] private Animator m_Animator;
+        [SerializeField] private int m_MaxHp;
 
         //Walk
         [SerializeField] private float m_WalkingSpeed;
@@ -35,6 +38,10 @@ namespace Game2D
         private int m_JumpCount;
         private bool m_AttackInput;
         private Collider2D m_Collider2D;
+        private int m_CurHp;
+        private bool m_GetHit;
+        private bool m_Dead;
+        private float m_GetHitTime;
 
         private void OnEnable()
         {
@@ -73,15 +80,27 @@ namespace Game2D
             m_IdleHash = Animator.StringToHash("Idle");
             m_WalkingHash = Animator.StringToHash("Walking");
             m_DyingHash = Animator.StringToHash("Dying");
+            m_CurHp = m_MaxHp;
+
+            if (onCurHPChanged != null)
+                onCurHPChanged(m_CurHp, m_MaxHp);
         }
 
         private void Update()
         {
-
+            if (m_GetHit)
+            {
+                m_GetHitTime -= Time.deltaTime;
+                if (m_GetHitTime <= 0)
+                    m_GetHit = false;
+            }
         }
 
         private void FixedUpdate()
         {
+            if (m_GetHit || m_Dead)
+                return;
+
             m_OnGround = Physics2D.BoxCast(m_GroundCastPoint.position, m_GroundCastSize, 0, Vector3.forward, 0, m_GroundLayerMask);
             if (m_OnGround)
                 m_JumpCount = 0;
@@ -89,6 +108,59 @@ namespace Game2D
             CheckMovement();
             CheckClimb();
             CheckAnimations();
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (m_GetHit || m_Dead)
+                return;
+
+            if (collision.CompareTag("Enemy"))
+            {
+                //get hit
+                m_CurHp -= 20;
+                m_GetHit = true;
+                m_GetHitTime = 0.5f;
+
+                if (onCurHPChanged != null)
+                    onCurHPChanged(m_CurHp, m_MaxHp);
+
+                if (m_CurHp <= 0)
+                {
+                    m_Dead = true;
+                    AudioManager.Instance.PlaySFX_PlayerDead();
+                    GamePlayManager.Instance.Gameover(false);
+                    PlayDyingAnim();
+                    return;
+                }
+
+                AudioManager.Instance.PlaySFX_PlayerGetHit();
+
+                Vector2 knockbackDirection = transform.position - collision.transform.position;
+                knockbackDirection = knockbackDirection.normalized;
+                m_Rigidbody.AddForce(knockbackDirection * 10, ForceMode2D.Impulse);
+
+                StartCoroutine(GetHitFX());
+            }
+        }
+
+        private IEnumerator GetHitFX()
+        {
+            SpriteRenderer spt;
+            TryGetComponent(out spt);
+            Color transparent = Color.white;
+            transparent.a = 0.25f;
+            int i = 0;
+            while (m_GetHitTime > 0)
+            {
+                if (i % 2 == 0)
+                    spt.color = Color.white;
+                else
+                    spt.color = transparent;
+                i++;
+                yield return null;
+            }
+            spt.color = Color.white;
         }
 
         private void CheckMovement()
@@ -121,7 +193,7 @@ namespace Game2D
 
         private void OnJump(InputAction.CallbackContext context)
         {
-            if (m_AttackInput)
+            if (m_AttackInput || m_GetHit || m_Dead)
                 return;
 
             if (context.started || context.performed)
@@ -151,6 +223,11 @@ namespace Game2D
                 m_AttackInput = true;
             else
                 m_AttackInput = false;
+        }
+
+        private void PlayAttackSFX()
+        {
+            AudioManager.Instance.PlaySFX_MeleeSplash();
         }
 
         [ContextMenu("PlayAttackAnim")]
