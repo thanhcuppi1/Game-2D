@@ -26,12 +26,17 @@ namespace Game2D
             }
         }
 
+        public Action onEnemyDied;
+
         [SerializeField] private GameplayPanel m_GameplayPanel;
         [SerializeField] private PausePanel m_PausePanel;
         [SerializeField] private GameoverPanel m_GameoverPanel;
+        [SerializeField] private LevelsData m_LevelsData;
 
         private GameState m_GameState;
         private bool m_Win;
+
+        public LevelsData LevelsData => m_LevelsData;
 
         private void Awake()
         {
@@ -91,12 +96,22 @@ namespace Game2D
 
         public void NextLevel()
         {
-            //TODO: load next scene
+            string nextLevel = m_LevelsData.GetNextLevel();
+            if (!string.IsNullOrEmpty(nextLevel))
+                SceneManager.LoadScene(nextLevel);
+            else
+                Debug.LogWarning("No more level");
         }
 
         public void Restart()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void EnemyDie()
+        {
+            if (onEnemyDied != null)
+                onEnemyDied();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Game2D
 
         [SerializeField] private Rigidbody2D m_Rigidbody;
         [SerializeField] private Animator m_Animator;
-        [SerializeField] private int m_MaxHp;
+        [SerializeField] private int m_MaxHp = 100;
 
         //Walk
         [SerializeField] private float m_WalkingSpeed;
@@ -27,7 +27,6 @@ namespace Game2D
         [SerializeField] private LayerMask m_ClimbableLayerMask;
         [SerializeField] private float m_ClimbSpeed;
 
-        private int m_Direction;
         private bool m_OnGround;
         private int m_AttackHash;
         private int m_DyingHash;
@@ -142,10 +141,69 @@ namespace Game2D
 
                 StartCoroutine(GetHitFX());
             }
+
+            //Spikes
+            if (collision.CompareTag("Spikes"))
+            {
+                //get hit
+                m_CurHp -= 1000;
+                m_GetHit = true;
+                m_GetHitTime = 0.5f;
+
+                if (onCurHPChanged != null)
+                    onCurHPChanged(m_CurHp, m_MaxHp);
+
+                if (m_CurHp <= 0)
+                {
+                    m_Dead = true;
+                    AudioManager.Instance.PlaySFX_PlayerDead();
+                    GamePlayManager.Instance.Gameover(false);
+                    PlayDyingAnim();
+                    return;
+                }
+
+                AudioManager.Instance.PlaySFX_PlayerGetHit();
+
+                
+
+                StartCoroutine(GetHitFX());
+            }
+        }
+
+       
+
+        private void OnCollisionStay2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("MoveablePlatform"))
+            {
+                transform.SetParent(collision.transform);
+            }
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("MoveablePlatform"))
+            {
+                transform.SetParent(collision.transform);
+            }
+        }
+
+        private void OnCollisionExit2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("MoveablePlatform"))
+            {
+                transform.SetParent(null);
+            }
         }
 
         private IEnumerator GetHitFX()
         {
+            Cinemachine.CinemachineImpulseSource impulseSource;
+            TryGetComponent(out impulseSource);
+            impulseSource.GenerateImpulse();
+
+            //CameraShake.Instance.Shake(0.1f);
+
             SpriteRenderer spt;
             TryGetComponent(out spt);
             Color transparent = Color.white;

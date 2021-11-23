@@ -20,6 +20,9 @@ namespace Game2D
         [SerializeField] private float m_WalkDistance;
         [SerializeField] private float m_RunSpeed;
         [SerializeField] private int m_Hp;
+        [SerializeField] private Transform m_CastkWallPoint;
+        [SerializeField] private Transform m_CastGroundPoint;
+        [SerializeField] private LayerMask m_PlatformLayerMask;
 
         private int m_ChangeParamHash;
         private int m_StateParamHash;
@@ -47,6 +50,18 @@ namespace Game2D
                 m_StartPosition = transform.position;
             Gizmos.DrawLine(new Vector2(m_StartPosition.x - m_WalkDistance, m_StartPosition.y),
                 new Vector2(m_StartPosition.x + m_WalkDistance, m_StartPosition.y));
+
+            Gizmos.color = Color.cyan;
+            Vector3 fromPos = m_CastkWallPoint.position;
+            Vector3 toPos = fromPos;
+            toPos.x += m_Direction * 0.5f;
+            Gizmos.DrawLine(fromPos, toPos);
+
+            Gizmos.color = Color.magenta;
+            fromPos = m_CastGroundPoint.position;
+            toPos = fromPos;
+            toPos.y -= 0.5f;
+            Gizmos.DrawLine(fromPos, toPos);
         }
 
         private IEnumerator UpdateAI()
@@ -68,7 +83,7 @@ namespace Game2D
                 else if (m_CurrentState == State.Walk)
                 {
                     float distance = Vector2.Distance(m_StartPosition, transform.position);
-                    if (distance > m_WalkDistance)
+                    if (distance > m_WalkDistance || CheckWallAndGround())
                     {
                         if (transform.position.x > m_StartPosition.x && m_Direction == 1)
                         {
@@ -108,7 +123,7 @@ namespace Game2D
                 else if (m_CurrentState == State.Run)
                 {
                     float distance = Vector2.Distance(m_StartPosition, transform.position);
-                    if (distance > m_WalkDistance)
+                    if (distance > m_WalkDistance || CheckWallAndGround())
                     {
                         if (transform.position.x > m_StartPosition.x && m_Direction == 1)
                         {
@@ -125,6 +140,23 @@ namespace Game2D
             }
         }
 
+        private bool CheckWallAndGround()
+        {
+            bool hitWall = false;
+            Vector3 fromPos = m_CastkWallPoint.position;
+            Vector3 toPos = fromPos;
+            toPos.x += m_Direction * 0.5f;
+            hitWall = Physics2D.Linecast(fromPos, toPos, m_PlatformLayerMask);
+
+            bool noGround = true;
+            fromPos = m_CastGroundPoint.position;
+            toPos = fromPos;
+            toPos.y -= 0.5f;
+            noGround = !Physics2D.Linecast(fromPos, toPos, m_PlatformLayerMask);
+
+            return hitWall || noGround;
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (m_GetHit)
@@ -138,6 +170,7 @@ namespace Game2D
                 if (m_Hp <= 0)
                 {
                     Destroy(gameObject);
+                    GamePlayManager.Instance.EnemyDie();
                     return;
                 }
                 m_GetHit = true;
