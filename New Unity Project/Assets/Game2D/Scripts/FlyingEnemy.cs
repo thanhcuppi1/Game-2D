@@ -80,7 +80,7 @@ namespace Game2D
 
                 Vector2 knockbackDirection = transform.position - collision.transform.position;
                 knockbackDirection = knockbackDirection.normalized;
-                m_Rigidbody2D.AddForce(knockbackDirection * 5, ForceMode2D.Impulse);
+                m_Rigidbody2D.AddForce(knockbackDirection * 3, ForceMode2D.Impulse);
             }
         }
 

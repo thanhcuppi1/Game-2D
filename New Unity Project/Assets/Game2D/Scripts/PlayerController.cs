@@ -293,7 +293,7 @@ namespace Game2D
         {
             m_Animator.SetBool(m_AttackHash, true);
             m_Animator.SetBool(m_IdleHash, false);
-            m_Animator.SetBool(m_WalkingHash, false);
+            m_Animator.SetBool(m_WalkingHash, true);
         }
 
         [ContextMenu("PlayIdleAnim")]
@@ -309,7 +309,7 @@ namespace Game2D
         {
             m_Animator.SetBool(m_WalkingHash, true);
             m_Animator.SetBool(m_IdleHash, false);
-            m_Animator.SetBool(m_AttackHash, false);
+            m_Animator.SetBool(m_AttackHash, true);
         }
 
         [ContextMenu("PlayDyingAnim")]
