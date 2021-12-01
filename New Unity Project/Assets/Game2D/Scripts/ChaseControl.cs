@@ -6,12 +6,15 @@ namespace Game2D
 {
     public class ChaseControl : MonoBehaviour
     {
-        public FlyingEnemy m_flyingEnemy;
+        public FlyingEnemy[] m_enemyArray;
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("Player"))
             {
-                 m_flyingEnemy.chase= true;
+                foreach (FlyingEnemy enemy in m_enemyArray)
+                {
+                    enemy.chase = true;
+                }
             }
         }
 
@@ -19,7 +22,10 @@ namespace Game2D
         {
             if (collision.CompareTag("Player"))
             {
-                m_flyingEnemy.chase = false;
+                foreach (FlyingEnemy enemy in m_enemyArray)
+                {
+                    enemy.chase = false;
+                }
             }
         }
     }
