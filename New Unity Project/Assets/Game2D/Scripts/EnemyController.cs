@@ -12,6 +12,7 @@ namespace Game2D
             Walk,
             Run,
             Hit,
+            Attack,
         }
 
         [SerializeField] private Animator m_Animator;
@@ -206,6 +207,9 @@ namespace Game2D
                 case State.Hit:
                     PlayHitAnimation();
                     break;
+                case State.Attack:
+                    PlayAttackAnimation();
+                    break;
             }
         }
 
@@ -235,6 +239,11 @@ namespace Game2D
         {
             m_Animator.SetTrigger(m_ChangeParamHash);
             m_Animator.SetInteger(m_StateParamHash, 4);
+        }
+        private void PlayAttackAnimation()
+        {
+            m_Animator.SetTrigger(m_ChangeParamHash);
+            m_Animator.SetInteger(m_StateParamHash, 5);
         }
     }
 }

@@ -163,11 +163,36 @@ namespace Game2D
                 }
 
                 AudioManager.Instance.PlaySFX_PlayerGetHit();
-
-                
-
                 StartCoroutine(GetHitFX());
             }
+
+            //bullet
+            if (collision.CompareTag("Bullet"))
+            {
+                //get hit
+                m_CurHp -= 1;
+                m_GetHit = true;
+                m_GetHitTime = 0.5f;
+
+                if (onCurHPChanged != null)
+                    onCurHPChanged(m_CurHp, m_MaxHp);
+
+                if (m_CurHp <= 0)
+                {
+                    m_Dead = true;
+                    AudioManager.Instance.PlaySFX_PlayerDead();
+                    GamePlayManager.Instance.Gameover(false);
+                    PlayDyingAnim();
+                    return;
+                }
+
+                AudioManager.Instance.PlaySFX_PlayerGetHit();
+                Vector2 knockbackDirection = transform.position - collision.transform.position;
+                knockbackDirection = knockbackDirection.normalized;
+                m_Rigidbody.AddForce(knockbackDirection * 5, ForceMode2D.Impulse);
+                StartCoroutine(GetHitFX());
+            }
+
         }
 
        
